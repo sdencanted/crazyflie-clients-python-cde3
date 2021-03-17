@@ -191,12 +191,12 @@ class SwarmTab(Tab, example_tab_class):
 
     # List of URIs, comment the one you do not want to fly
     uris = {
-        URI1,
-        # URI2,
+        #URI1,
+        URI2,
         #URI3,
         #URI4,
-        # URI5,
-        # URI6,
+        URI5,
+        URI6,
         #URI7,
         #URI8,
         #URI9,
@@ -339,7 +339,6 @@ class SwarmTab(Tab, example_tab_class):
 
     def read_input_wrapper(self):
         self.swarm.parallel(self.read_input)
-        # pass
 
     def connected(self):
         if self.swarmConnectBtn.text() == 'Connect':
@@ -411,7 +410,7 @@ class SwarmTab(Tab, example_tab_class):
         # self.tmp_timer = PeriodicTimer(0.1, self.hover)
         # self.tmp_timer.start()
         # self.swarm.parallel(self.hover)
-        # self.tmp_timer.stop()
+        self.tmp_timer.stop()
         self.tmp_counter = 0.0
         self.RACE_STATE = 'RACE'
         self.tmp_timer = PeriodicTimer(INPUT_READ_PERIOD, self.race)
