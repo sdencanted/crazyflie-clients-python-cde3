@@ -347,6 +347,7 @@ class ExampleTab(Tab, example_tab_class):
     def _baro_data_received(self, timestamp, data, logconf):
         if self.isVisible():
             estimated_z = data[LOG_NAME_ESTIMATED_Z]
+            print(estimated_z)
             self.actualHeight.setText(("%.2f" % estimated_z))
             self.ai.setBaro(estimated_z, self.is_visible())
 
@@ -857,6 +858,7 @@ class ExampleTab(Tab, example_tab_class):
 
     def _log_data_signal_wrapper(self, ts, data, logconf):
         """Wrapper for signal"""
+        print(logconf)
         # For some reason the *.emit functions are not
         # the same over time (?!) so they cannot be registered and then
         # removed as callbacks.
@@ -924,5 +926,5 @@ class ExampleTab(Tab, example_tab_class):
         # Check so that the incoming data belongs to what we are currently
         # logging
         if self._previous_config:
-            if self._previous_config.name == logconf.name:
+            if self._previous_config.name == log_conf.name:
                 self._plot.add_data(data, timestamp)
