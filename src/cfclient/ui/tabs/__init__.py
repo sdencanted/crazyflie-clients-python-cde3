@@ -38,7 +38,7 @@ from .LogBlockTab import LogBlockTab
 from .LogTab import LogTab
 from .ParamTab import ParamTab
 from .PlotTab import PlotTab
-from .locopositioning_tab import LocoPositioningTab
+# from .locopositioning_tab import LocoPositioningTab
 from .SwarmTab import SwarmTab
 from .QualisysTab import QualisysTab
 from .LogClientTab import LogClientTab
@@ -58,8 +58,8 @@ available = [
     LogTab,
     ParamTab,
     PlotTab,
-    LocoPositioningTab,
-    #LighthouseTab,
+    # LocoPositioningTab,
+    # LighthouseTab,
     QualisysTab,
     LogClientTab,
 ]
