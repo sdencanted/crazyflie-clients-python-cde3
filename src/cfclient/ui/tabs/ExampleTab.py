@@ -49,6 +49,7 @@ from cfclient.ui.tab import Tab
 
 LOG_NAME_ESTIMATED_Z = "stateEstimate.z"
 
+
 __author__ = 'Bitcraze AB'
 __all__ = ['ExampleTab']
 
@@ -347,9 +348,9 @@ class ExampleTab(Tab, example_tab_class):
     def _baro_data_received(self, timestamp, data, logconf):
         if self.isVisible():
             estimated_z = data[LOG_NAME_ESTIMATED_Z]
-            print(estimated_z)
             self.actualHeight.setText(("%.2f" % estimated_z))
             self.ai.setBaro(estimated_z, self.is_visible())
+            # self.targetHeight.setText(("%.2f" % ))
 
     def _heighthold_input_updated(self, roll, pitch, yaw, height):
         if (self.isVisible() and
@@ -442,6 +443,7 @@ class ExampleTab(Tab, example_tab_class):
             # The sensor is available, set up the logging
             self.logBaro = LogConfig("Baro", 200)
             self.logBaro.add_variable(LOG_NAME_ESTIMATED_Z, "float")
+            self.logBaro.add_variable("posCtl.targetZ" , "float")
 
             try:
                 self.helper.cf.log.add_config(self.logBaro)
@@ -779,7 +781,7 @@ class ExampleTab(Tab, example_tab_class):
         #     heightHoldPossible = True
         #     hoverPossible = True
 
-        print(self.helper.cf.param.values)
+        
         # print(self.helper.cf.param.values["deck"]["bcFlow2"])
         # print(self.helper.cf.param.values["deck"]["bcZRanger2"])
 
@@ -858,7 +860,6 @@ class ExampleTab(Tab, example_tab_class):
 
     def _log_data_signal_wrapper(self, ts, data, logconf):
         """Wrapper for signal"""
-        print(logconf)
         # For some reason the *.emit functions are not
         # the same over time (?!) so they cannot be registered and then
         # removed as callbacks.
@@ -927,4 +928,10 @@ class ExampleTab(Tab, example_tab_class):
         # logging
         if self._previous_config:
             if self._previous_config.name == log_conf.name:
-                self._plot.add_data(data, timestamp)
+                if log_conf.name == "Baro":
+                     data["posCtl.targetZ"] = self.helper.referenceHeight
+                     self._plot.add_data(data, timestamp)
+                else: 
+                     self._plot.add_data(data, timestamp)
+
+
