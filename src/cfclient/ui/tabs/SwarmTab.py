@@ -391,9 +391,10 @@ class SwarmTab(Tab, example_tab_class):
     def race_take_off(self):
         # self.swarm.parallel(self.take_off)
         # TODO:
+        self.error_accumulator = 0.0   #<------------------------------------Added here
         self.race_started = False
         self.RACE_STATE = 'TAKE_OFF'
-        self.targetZ = 0.2
+        self.targetZ = 0.4
         self.tmp_timer = PeriodicTimer(INPUT_READ_PERIOD, self.take_off)
         self.tmp_timer.start()
 
@@ -460,7 +461,7 @@ class SwarmTab(Tab, example_tab_class):
         take_off_time = 1.0
         sleep_time = INPUT_READ_PERIOD/2.0
         time_steps = int(take_off_time/ sleep_time)
-        z_step = (0.6 - 0.2) / time_steps
+        z_step = (0.6 - 0.4) / time_steps   #<----------------------------------Added here
         self.tmp_counter += sleep_time
         self.targetZ += z_step
         if self.targetZ >= 0.6:
@@ -492,7 +493,7 @@ class SwarmTab(Tab, example_tab_class):
         land_time = 1.0
         sleep_time = INPUT_READ_PERIOD/2.0
         time_steps = int(land_time/ sleep_time)
-        z_step = (0.6 - 0.2) / time_steps
+        z_step = (0.6 - 0.4) / time_steps   #<----------------------------------Added here
         self.tmp_counter += sleep_time
         self.targetZ -= z_step
 
