@@ -65,7 +65,6 @@ class PluginHelper():
                 self.hover_input_updated.call(vy, vx, yawrate, self.sine_wave_generator())
             if (self.inputType == 2):  # Ramp
                 self.hover_input_updated.call(vy, vx, yawrate, self.referenceHeight)
-            print(self.sine_wave_generator())
         else:
             self.hover_input_updated.call(vy, vx, yawrate, height)
 
