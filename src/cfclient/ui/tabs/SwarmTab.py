@@ -226,6 +226,16 @@ class SwarmTab(Tab, example_tab_class):
         self.helper = helper
         self.factory = CachedCfFactory(rw_cache='./cache')
         self.swarm = None
+        self.error_accumulator = [0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,]
         self.cfs = [self.cf1,
                     self.cf2,
                     self.cf3,
@@ -277,7 +287,7 @@ class SwarmTab(Tab, example_tab_class):
         self._read_timer = None
         self.RACE_STATE = 'LANDED'
         self.targetVfront = 0.0
-        self.targetZ = 0.2
+        self.targetZ = 0.4
         self.tmp_timer = None
         self.tmp_counter = 0.0
         self.race_time = 10.0
@@ -391,7 +401,17 @@ class SwarmTab(Tab, example_tab_class):
     def race_take_off(self):
         # self.swarm.parallel(self.take_off)
         # TODO:
-        self.error_accumulator = 0.0   #<------------------------------------Added here
+        self.error_accumulator = [0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,
+                    0.,]
+        # self.error_accumulator = 0.0   #<------------------------------------Added here
         self.race_started = False
         self.RACE_STATE = 'TAKE_OFF'
         self.targetZ = 0.4
