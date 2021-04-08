@@ -192,11 +192,11 @@ class SwarmTab(Tab, example_tab_class):
     # List of URIs, comment the one you do not want to fly
     uris = {
         URI1,
-        # URI2,
+        #URI2,
         #URI3,
         #URI4,
-        # URI5,
-        # URI6,
+        #URI5,
+        #URI6,
         #URI7,
         #URI8,
         #URI9,
@@ -226,6 +226,7 @@ class SwarmTab(Tab, example_tab_class):
         self.helper = helper
         self.factory = CachedCfFactory(rw_cache='./cache')
         self.swarm = None
+        # self.hover_input_updated = Caller()
         self.error_accumulator = [0.,
                     0.,
                     0.,
@@ -287,7 +288,7 @@ class SwarmTab(Tab, example_tab_class):
         self._read_timer = None
         self.RACE_STATE = 'LANDED'
         self.targetVfront = 0.0
-        self.targetZ = 0.4
+        self.targetZ = 0.6
         self.tmp_timer = None
         self.tmp_counter = 0.0
         self.race_time = 10.0
@@ -414,7 +415,7 @@ class SwarmTab(Tab, example_tab_class):
         # self.error_accumulator = 0.0   #<------------------------------------Added here
         self.race_started = False
         self.RACE_STATE = 'TAKE_OFF'
-        self.targetZ = 0.4
+        self.targetZ = 0.6
         self.tmp_timer = PeriodicTimer(INPUT_READ_PERIOD, self.take_off)
         self.tmp_timer.start()
 
@@ -440,13 +441,14 @@ class SwarmTab(Tab, example_tab_class):
 
     def race_land(self):
         self.race_started = False
-        self.RACE_STATE = 'LANDING'
-        self.tmp_timer = PeriodicTimer(INPUT_READ_PERIOD, self.land)
-        self.tmp_timer.start()
-        # self.swarm.parallel(self.land)
+        if not (self.RACE_STATE == 'LANDED' or self.RACE_STATE == 'LANDING'):
+            self.RACE_STATE = 'LANDING'
+            self.tmp_timer = PeriodicTimer(INPUT_READ_PERIOD, self.land)
+            self.tmp_timer.start()
+            # self.swarm.parallel(self.land)
 
     def read_input(self, scf):
-        # logger.info("state is %s and targetZ is %f", self.RACE_STATE, self.targetZ)
+        logger.info("state is %s and targetZ is %f", self.RACE_STATE, self.targetZ)
         if not (self.RACE_STATE == 'LANDED'):
             if self.RACE_STATE == 'TAKE_OFF':
                 if self.tmp_counter <= 1.0:
@@ -480,12 +482,16 @@ class SwarmTab(Tab, example_tab_class):
     def take_off(self):
         take_off_time = 1.0
         sleep_time = INPUT_READ_PERIOD/2.0
+        # print(INPUT_READ_PERIOD)
         time_steps = int(take_off_time/ sleep_time)
-        z_step = (0.6 - 0.4) / time_steps   #<----------------------------------Added here
+        z_step = (0.6 - 0.1) / time_steps   #<----------------------------------Added here
         self.tmp_counter += sleep_time
-        self.targetZ += z_step
+        self.targetZ == 0.6
+        # self.targetZ -= z_step
+        print("Target Height Take Off:", self.targetZ)
         if self.targetZ >= 0.6:
             self.targetZ = 0.6
+        # self.targetZ = 0.6
 
     def hover(self, scf):
         hover_time = 5.0
@@ -513,9 +519,13 @@ class SwarmTab(Tab, example_tab_class):
         land_time = 1.0
         sleep_time = INPUT_READ_PERIOD/2.0
         time_steps = int(land_time/ sleep_time)
-        z_step = (0.6 - 0.4) / time_steps   #<----------------------------------Added here
+        z_step = (0.6 - 0.1) / time_steps   #<----------------------------------Added here
         self.tmp_counter += sleep_time
         self.targetZ -= z_step
+        if self.targetZ <= 0:
+            self.targetZ = 0.0
+
+        print("Land:", self.targetZ)
 
     def attach_logger(self, scf):
         logger.info('Waiting for Logs')
