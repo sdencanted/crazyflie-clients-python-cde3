@@ -510,14 +510,18 @@ class SwarmTab(Tab, example_tab_class):
         sleep_time = INPUT_READ_PERIOD
         race_speed = 0.2
         self.tmp_counter += sleep_time
-        if self.tmp_counter < 2*race_time:
-            self.targetVfront = race_speed
-        elif self.tmp_counter > 2*race_time and self.tmp_counter <( 3*race_time):
-            self.targetVfront = -race_speed
+        if self.tmp_counter < race_time:
+            # self.targetVfront = race_speed
+            self.targetX = 1.4
+        elif self.tmp_counter > race_time and self.tmp_counter <( 2*race_time):
+            # self.targetVfront = -race_speed
+            self.targetX = 0.0
+        elif self.tmp_counter >(2*race_time) and self.tmp_counter <(3*race_time):
+            # self.targetVfront = race_speed
+            self.targetX = 1.4
         elif self.tmp_counter >(3*race_time) and self.tmp_counter <(4*race_time):
-            self.targetVfront = race_speed
-        elif self.tmp_counter >(4*race_time) and self.tmp_counter <(5*race_time):
-            self.targetVfront = -race_speed
+            # self.targetVfront = -race_speed
+            self.targetX = 0.0
 
     def land(self):
         land_time = 1.0
