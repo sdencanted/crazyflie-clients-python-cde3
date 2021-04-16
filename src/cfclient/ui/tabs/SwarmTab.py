@@ -452,7 +452,9 @@ class SwarmTab(Tab, example_tab_class):
         if not (self.RACE_STATE == 'LANDED'):
             if self.RACE_STATE == 'TAKE_OFF':
                 if self.tmp_counter <= 1.0:
-                    scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                    # scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                    # print("TAKE_OFF")
+                    scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
                     time.sleep(0.01)
                 else:
                     self.tmp_timer.stop()
@@ -460,11 +462,13 @@ class SwarmTab(Tab, example_tab_class):
                     self.tmp_counter = 0.0
             if self.RACE_STATE == 'HOVER':
                 self.race_started = False
-                scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                # scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
                 # time.sleep(0.01)
+                # print("HOVER")
             if self.RACE_STATE == 'RACE':
                 if self.tmp_counter <= (self.race_time * 4):
-                    scf.cf.commander.send_hover_setpoint(self.targetVfront, 0, 0, self.targetZ)
+                    scf.cf.commander.send_position_setpoint(self.targetX, 0, self.targetZ, 0)
                 else:
                     self.tmp_timer.stop()
                     self.RACE_STATE = 'HOVER'
