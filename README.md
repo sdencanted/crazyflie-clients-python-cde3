@@ -1,4 +1,4 @@
-# This Repo is currently a stable working version for cf 2.1.
+# This repo is currently a stable working version for cf 2.1.
 courtesy of ShawnMLee and Jerluenn
 
 # Crazyflie PC client [![CI](https://github.com/bitcraze/crazyflie-clients-python/workflows/CI/badge.svg)](https://github.com/bitcraze/crazyflie-clients-python/actions?query=workflow%3ACI) [![cfclient](https://snapcraft.io//cfclient/badge.svg)](https://snapcraft.io/cfclient)
