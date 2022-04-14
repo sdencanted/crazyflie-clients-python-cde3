@@ -191,7 +191,7 @@ class SwarmTab(Tab, example_tab_class):
 
     # List of URIs, comment the one you do not want to fly
     uris = {
-        URI1,
+        #URI1,
         #URI2,
         #URI3,
         #URI4,

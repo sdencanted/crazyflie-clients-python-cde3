@@ -39,7 +39,7 @@ from .LogTab import LogTab
 from .ParamTab import ParamTab
 from .PlotTab import PlotTab
 # from .locopositioning_tab import LocoPositioningTab
-from .SwarmTab import SwarmTab
+# from .SwarmTab import SwarmTab
 from .QualisysTab import QualisysTab
 from .LogClientTab import LogClientTab
 #from .lighthouse_tab import LighthouseTab
@@ -50,7 +50,7 @@ __all__ = []
 available = [
     ConsoleTab,
     ExampleTab,
-    SwarmTab,
+    #SwarmTab,
     FlightTab,
     # GpsTab,
     LEDTab,
