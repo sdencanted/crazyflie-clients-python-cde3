@@ -30,7 +30,6 @@ The flight control tab shows telemetry data and flight settings.
 """
 
 import logging, time
-
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QAbstractItemModel, QModelIndex
 from PyQt5.QtWidgets import QMessageBox, QLabel
@@ -166,16 +165,32 @@ class SwarmTab(Tab, example_tab_class):
     ]
 
     # Change uris and sequences according to your setup
-    URI1 = 'radio://0/80/2M/E7E7E7E701'
-    URI2 = 'radio://0/80/2M/E7E7E7E702'
-    URI3 = 'radio://0/80/2M/E7E7E7E703'
-    URI4 = 'radio://0/80/2M/E7E7E7E704'
-    URI5 = 'radio://0/80/2M/E7E7E7E705'
-    URI6 = 'radio://0/80/2M/E7E7E7E706'
-    URI7 = 'radio://0/80/2M/E7E7E7E707'
-    URI8 = 'radio://0/80/2M/E7E7E7E708'
-    URI9 = 'radio://0/80/2M/E7E7E7E709'
-    URI10 = 'radio://0/80/2M/E7E7E7E70A'
+    URI1 = 'radio://0/114/2M/E7E7E7E70D'
+    URI2 = 'radio://0/114/2M/E7E7E7E702'
+
+    #URI3 = 'radio://0/114/2M/E7E7E7E704'
+    URI3 = 'radio://0/114/2M/E7E7E7E703'
+
+    URI4 = 'radio://0/114/2M/E7E7E7E705'
+    URI5 = 'radio://0/114/2M/E7E7E7E706'
+    URI6 = 'radio://0/114/2M/E7E7E7E708'
+
+    URI7 = 'radio://0/114/2M/E7E7E7E709'
+    #URI7 = 'radio://0/114/2M/E7E7E7E707'
+
+
+    URI8 = 'radio://0/114/2M/E7E7E7E70A'
+    URI9 = 'radio://0/114/2M/E7E7E7E70B'
+    URI10 = 'radio://0/114/2M/E7E7E7E70C'
+
+        
+    # UNCOMMENT THESE DRONES FOR LIVE DEMO
+    # URI8 = 'radio://0/114/2M/E7E7E7E724'
+    #URI9 = 'radio://0/114/2M/E7E7E7E725'
+    #URI10 = 'radio://0/114/2M/E7E7E7E726'
+
+    
+
     URIS = [
         URI1,
         URI2,
@@ -186,21 +201,21 @@ class SwarmTab(Tab, example_tab_class):
         URI7,
         URI8,
         URI9,
-        URI10
+        URI10,
     ]
 
     # List of URIs, comment the one you do not want to fly
     uris = {
-        #URI1,
+        URI1,
         #URI2,
         #URI3,
-        #URI4,
+        URI4,
         #URI5,
         #URI6,
-        #URI7,
+        URI7,
         #URI8,
         #URI9,
-        #URI10
+        #URI10,
     }
 
     # UI_DATA_UPDATE_FPS = 10
@@ -271,9 +286,11 @@ class SwarmTab(Tab, example_tab_class):
         self.cf8.toggled.connect(lambda: self._select(7, self.cf8.isChecked()))
         self.cf9.toggled.connect(lambda: self._select(8, self.cf9.isChecked()))
         self.cf10.toggled.connect(lambda: self._select(9, self.cf10.isChecked()))
+
         for i in range(10):
             label = getattr(self, 'status_cf{}'.format(i+1))
             label.setStyleSheet(STYLE_RED_BACKGROUND)
+
         self.swarmConnectBtn.clicked.connect(self.connected)
         self.raceTakeOffBtn.clicked.connect(self.race_take_off)
         self.raceStartBtn.clicked.connect(self.race_start)
@@ -291,7 +308,7 @@ class SwarmTab(Tab, example_tab_class):
         self.targetZ = 0.6
         self.tmp_timer = None
         self.tmp_counter = 0.0
-        self.race_time = 10.0
+        self.race_time = 5.0
 
         # setup gains UI
         self.k1Combo_cf1.valueChanged.connect(self._k123_gain_changed)
@@ -452,23 +469,27 @@ class SwarmTab(Tab, example_tab_class):
         if not (self.RACE_STATE == 'LANDED'):
             if self.RACE_STATE == 'TAKE_OFF':
                 if self.tmp_counter <= 1.0:
-                    # scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                    scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
                     # print("TAKE_OFF")
-                    scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
-                    time.sleep(0.01)
+                    # scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
+                    #time.sleep(0.01)
+                    #time.sleep(5.0) # give time for takeoff
                 else:
                     self.tmp_timer.stop()
                     self.RACE_STATE = 'HOVER'
                     self.tmp_counter = 0.0
             if self.RACE_STATE == 'HOVER':
                 self.race_started = False
-                # scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
-                scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
+                scf.cf.commander.send_hover_setpoint(0, 0, 0, self.targetZ)
+                # scf.cf.commander.send_position_setpoint(0, 0, self.targetZ, 0)
                 # time.sleep(0.01)
                 # print("HOVER")
+                #time.sleep(5.0)
             if self.RACE_STATE == 'RACE':
                 if self.tmp_counter <= (self.race_time * 4):
-                    scf.cf.commander.send_position_setpoint(self.targetX, 0, self.targetZ, 0)
+                    # scf.cf.commander.send_position_setpoint(self.targetX, 0, self.targetZ, 0)
+                    scf.cf.commander.send_hover_setpoint(self.targetVfront, 0, 0, self.targetZ)
+                    # scf.cf.commander.send_velocity_world_setpoint(self.targetVfront, 0, 0, 0)
                 else:
                     self.tmp_timer.stop()
                     self.RACE_STATE = 'HOVER'
@@ -498,6 +519,7 @@ class SwarmTab(Tab, example_tab_class):
         # self.targetZ = 0.6
 
     def hover(self, scf):
+        # hover_time = 2.0
         hover_time = 5.0
         sleep_time = INPUT_READ_PERIOD
         steps = int(hover_time/ sleep_time)
@@ -508,20 +530,20 @@ class SwarmTab(Tab, example_tab_class):
         # logger.info("counter %f" % self.tmp_counter)
         race_time = self.race_time
         sleep_time = INPUT_READ_PERIOD
-        race_speed = 0.2
+        race_speed = 0.4
         self.tmp_counter += sleep_time
         if self.tmp_counter < race_time:
-            # self.targetVfront = race_speed
-            self.targetX = 1.4
+            self.targetVfront = race_speed
+            # self.targetX = 1.4
         elif self.tmp_counter > race_time and self.tmp_counter <( 2*race_time):
-            # self.targetVfront = -race_speed
-            self.targetX = 0.0
+            self.targetVfront = -race_speed
+            # self.targetX = 0.0
         elif self.tmp_counter >(2*race_time) and self.tmp_counter <(3*race_time):
-            # self.targetVfront = race_speed
-            self.targetX = 1.4
+            self.targetVfront = race_speed
+            # self.targetX = 1.4
         elif self.tmp_counter >(3*race_time) and self.tmp_counter <(4*race_time):
-            # self.targetVfront = -race_speed
-            self.targetX = 0.0
+            self.targetVfront = -race_speed
+            # self.targetX = 0.0
 
     def land(self):
         land_time = 1.0
@@ -618,7 +640,7 @@ class SwarmTab(Tab, example_tab_class):
         time.sleep(0.1)
         cf.param.set_value('kalman.resetEstimation', '0')
 
-        self.wait_for_position_estimator(cf)
+        # self.wait_for_position_estimator(cf)
 
     # def take_off(self, cf, position):
     #     take_off_time = 1.0
